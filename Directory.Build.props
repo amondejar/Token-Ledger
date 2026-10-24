@@ -15,8 +15,8 @@
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <PackageTags>ai;llm;tokens;cost;testing;snapshot;record-replay;microsoft-extensions-ai;ichatclient</PackageTags>
-    <PackageProjectUrl>https://github.com/amondejar/tokenledger</PackageProjectUrl>
-    <RepositoryUrl>https://github.com/amondejar/tokenledger</RepositoryUrl>
+    <PackageProjectUrl>https://github.com/amondejar/Token-Ledger</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/amondejar/Token-Ledger</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
     <IncludeSymbols>true</IncludeSymbols>

@@ -20,4 +20,4 @@ ledger.Budget(maxCalls: 3, maxTokens: 4_000);
 `TOKENLEDGER_MODE` = `auto` (default on your machine), `replay` (default in CI), `record` or `live`.
 `TOKENLEDGER_UPDATE=1` accepts the current measurements.
 
-Documentation: https://github.com/amondejar/tokenledger
+Documentation: https://github.com/amondejar/Token-Ledger
