@@ -1,0 +1,21 @@
+name: Feature request
+description: Something TokenLedger could do.
+labels: [enhancement]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: The problem
+      description: What are you trying to measure or protect against, and what gets in the way today?
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: What you propose
+      description: Code you would like to write is the best description.
+      render: csharp
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: What you do instead today

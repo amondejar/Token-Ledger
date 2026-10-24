@@ -1,0 +1,146 @@
+TokenLedger.LedgerChangeKind.Change
+TokenLedger.LedgerChangeKind.Improvement
+TokenLedger.LedgerChangeKind.Regression
+TokenLedger.LedgerFailOn.Change
+TokenLedger.LedgerFailOn.Never
+TokenLedger.LedgerFailOn.Regression
+TokenLedger.LedgerMode.Auto
+TokenLedger.LedgerMode.Live
+TokenLedger.LedgerMode.Record
+TokenLedger.LedgerMode.Replay
+enum TokenLedger.LedgerChangeKind
+enum TokenLedger.LedgerFailOn
+enum TokenLedger.LedgerMode
+public System.Collections.Generic.IReadOnlyDictionary<string, TokenLedger.ModelPrice> TokenLedger.LedgerPricing.Models { get; }
+public System.Collections.Generic.IReadOnlyList<TokenLedger.LedgerCall> TokenLedger.LedgerScenario.Calls { get; }
+public System.Collections.Generic.IReadOnlyList<TokenLedger.LedgerDifference> TokenLedger.LedgerScenario.Differences { get; }
+public System.Collections.Generic.IReadOnlyList<string> TokenLedger.LedgerCall.Tools { get; init; }
+public System.Collections.Generic.IReadOnlyList<string> TokenLedger.LedgerCost.UnpricedModels { get; init; }
+public System.Threading.Tasks.ValueTask TokenLedger.LedgerScenario.DisposeAsync()
+public TokenLedger.LedgerBudget()
+public TokenLedger.LedgerBudget? TokenLedger.LedgerOptions.DefaultBudget { get; set; }
+public TokenLedger.LedgerCall()
+public TokenLedger.LedgerChangeKind TokenLedger.LedgerDifference.Kind { get; init; }
+public TokenLedger.LedgerCost TokenLedger.LedgerScenario.Cost { get; }
+public TokenLedger.LedgerCost(decimal Amount, string Currency, System.Collections.Generic.IReadOnlyList<string> UnpricedModels)
+public TokenLedger.LedgerDifference(TokenLedger.LedgerChangeKind Kind, string Description)
+public TokenLedger.LedgerFailOn TokenLedger.LedgerOptions.FailOn { get; set; }
+public TokenLedger.LedgerFailOn TokenLedger.LedgerScenario.FailOn { get; set; }
+public TokenLedger.LedgerMode TokenLedger.LedgerScenario.Mode { get; }
+public TokenLedger.LedgerMode? TokenLedger.LedgerOptions.Mode { get; set; }
+public TokenLedger.LedgerOptions TokenLedger.LedgerOptions.Normalize(System.Func<string, string> normalizer)
+public TokenLedger.LedgerOptions TokenLedger.LedgerOptions.Normalize(System.Text.RegularExpressions.Regex pattern, string replacement)
+public TokenLedger.LedgerOptions TokenLedger.LedgerOptions.NormalizeGuids()
+public TokenLedger.LedgerOptions TokenLedger.LedgerOptions.NormalizeTimestamps()
+public TokenLedger.LedgerOptions TokenLedger.LedgerOptions.Redact(System.Func<string, string> redactor)
+public TokenLedger.LedgerOptions TokenLedger.LedgerOptions.Redact(System.Text.RegularExpressions.Regex pattern, string replacement)
+public TokenLedger.LedgerPricing TokenLedger.LedgerOptions.Pricing { get; }
+public TokenLedger.LedgerPricing TokenLedger.LedgerPricing.Add(string model, TokenLedger.ModelPrice price)
+public TokenLedger.LedgerPricing TokenLedger.LedgerPricing.Add(string model, decimal input, decimal output, decimal? cachedInput = null)
+public TokenLedger.LedgerPricing TokenLedger.LedgerScenario.Pricing { get; }
+public TokenLedger.LedgerPricing()
+public TokenLedger.LedgerScenario TokenLedger.LedgerScenario.Budget(TokenLedger.LedgerBudget budget)
+public TokenLedger.LedgerScenario TokenLedger.LedgerScenario.Budget(int? maxCalls = null, long? maxInputTokens = null, long? maxOutputTokens = null, long? maxTokens = null, decimal? maxCost = null)
+public TokenLedger.LedgerTotals TokenLedger.LedgerScenario.Totals { get; }
+public TokenLedger.LedgerTotals(int Calls, long InputTokens, long OutputTokens, long CachedInputTokens, long ReasoningTokens, int CallsWithoutUsage)
+public TokenLedger.ModelPrice(decimal Input, decimal Output, decimal? CachedInput = null)
+public TokenLedger.ModelPrice? TokenLedger.LedgerPricing.Find(string model)
+public TokenLedger.TokenLedgerChatClient(Microsoft.Extensions.AI.IChatClient innerClient)
+public TokenLedger.TokenLedgerException(string message)
+public TokenLedger.TokenLedgerException(string message, System.Exception innerException)
+public bool TokenLedger.LedgerBudget.Equals(TokenLedger.LedgerBudget? other)
+public bool TokenLedger.LedgerCall.Replayed { get; init; }
+public bool TokenLedger.LedgerCall.Streaming { get; init; }
+public bool TokenLedger.LedgerCall.UsageReported { get; }
+public bool TokenLedger.LedgerCost.Equals(TokenLedger.LedgerCost? other)
+public bool TokenLedger.LedgerCost.IsComplete { get; }
+public bool TokenLedger.LedgerDifference.Equals(TokenLedger.LedgerDifference? other)
+public bool TokenLedger.LedgerOptions.UpdateBaselines { get; set; }
+public bool TokenLedger.LedgerTotals.Equals(TokenLedger.LedgerTotals? other)
+public bool TokenLedger.ModelPrice.Equals(TokenLedger.ModelPrice? other)
+public decimal TokenLedger.LedgerCost.Amount { get; init; }
+public decimal TokenLedger.ModelPrice.Input { get; init; }
+public decimal TokenLedger.ModelPrice.Output { get; init; }
+public decimal? TokenLedger.LedgerBudget.MaxCost { get; init; }
+public decimal? TokenLedger.LedgerPricing.Cost(string model, long inputTokens, long outputTokens, long cachedInputTokens = 0)
+public decimal? TokenLedger.ModelPrice.CachedInput { get; init; }
+public double TokenLedger.LedgerOptions.Tolerance { get; set; }
+public double TokenLedger.LedgerScenario.Tolerance { get; set; }
+public int TokenLedger.LedgerTotals.Calls { get; init; }
+public int TokenLedger.LedgerTotals.CallsWithoutUsage { get; init; }
+public int? TokenLedger.LedgerBudget.MaxCalls { get; init; }
+public long TokenLedger.LedgerTotals.CachedInputTokens { get; init; }
+public long TokenLedger.LedgerTotals.InputTokens { get; init; }
+public long TokenLedger.LedgerTotals.OutputTokens { get; init; }
+public long TokenLedger.LedgerTotals.ReasoningTokens { get; init; }
+public long TokenLedger.LedgerTotals.Tokens { get; }
+public long? TokenLedger.LedgerBudget.MaxInputTokens { get; init; }
+public long? TokenLedger.LedgerBudget.MaxOutputTokens { get; init; }
+public long? TokenLedger.LedgerBudget.MaxTokens { get; init; }
+public long? TokenLedger.LedgerCall.CachedInputTokens { get; init; }
+public long? TokenLedger.LedgerCall.InputTokens { get; init; }
+public long? TokenLedger.LedgerCall.OutputTokens { get; init; }
+public long? TokenLedger.LedgerCall.ReasoningTokens { get; init; }
+public override System.Collections.Generic.IAsyncEnumerable<Microsoft.Extensions.AI.ChatResponseUpdate> TokenLedger.TokenLedgerChatClient.GetStreamingResponseAsync(System.Collections.Generic.IEnumerable<Microsoft.Extensions.AI.ChatMessage> messages, Microsoft.Extensions.AI.ChatOptions? options = null, System.Threading.CancellationToken cancellationToken = default)
+public override System.Threading.Tasks.Task<Microsoft.Extensions.AI.ChatResponse> TokenLedger.TokenLedgerChatClient.GetResponseAsync(System.Collections.Generic.IEnumerable<Microsoft.Extensions.AI.ChatMessage> messages, Microsoft.Extensions.AI.ChatOptions? options = null, System.Threading.CancellationToken cancellationToken = default)
+public override bool TokenLedger.LedgerBudget.Equals(object? obj)
+public override bool TokenLedger.LedgerCost.Equals(object? obj)
+public override bool TokenLedger.LedgerDifference.Equals(object? obj)
+public override bool TokenLedger.LedgerTotals.Equals(object? obj)
+public override bool TokenLedger.ModelPrice.Equals(object? obj)
+public override int TokenLedger.LedgerBudget.GetHashCode()
+public override int TokenLedger.LedgerCost.GetHashCode()
+public override int TokenLedger.LedgerDifference.GetHashCode()
+public override int TokenLedger.LedgerTotals.GetHashCode()
+public override int TokenLedger.ModelPrice.GetHashCode()
+public override string TokenLedger.LedgerBudget.ToString()
+public override string TokenLedger.LedgerCall.ToString()
+public override string TokenLedger.LedgerCost.ToString()
+public override string TokenLedger.LedgerDifference.ToString()
+public override string TokenLedger.LedgerScenario.ToString()
+public override string TokenLedger.LedgerTotals.ToString()
+public override string TokenLedger.ModelPrice.ToString()
+public required int TokenLedger.LedgerCall.Index { get; init; }
+public required string TokenLedger.LedgerCall.Model { get; init; }
+public static Microsoft.Extensions.AI.ChatClientBuilder TokenLedger.TokenLedgerChatClientBuilderExtensions.UseTokenLedger(this Microsoft.Extensions.AI.ChatClientBuilder builder)
+public static TokenLedger.LedgerOptions TokenLedger.Ledger.Options { get; }
+public static TokenLedger.LedgerPricing TokenLedger.LedgerPricing.Load(string path)
+public static TokenLedger.LedgerScenario TokenLedger.Ledger.Scenario(string name, string callerFilePath = "")
+public static TokenLedger.LedgerScenario? TokenLedger.Ledger.Current { get; }
+public static bool TokenLedger.LedgerBudget.op_Equality(TokenLedger.LedgerBudget? left, TokenLedger.LedgerBudget? right)
+public static bool TokenLedger.LedgerBudget.op_Inequality(TokenLedger.LedgerBudget? left, TokenLedger.LedgerBudget? right)
+public static bool TokenLedger.LedgerCost.op_Equality(TokenLedger.LedgerCost? left, TokenLedger.LedgerCost? right)
+public static bool TokenLedger.LedgerCost.op_Inequality(TokenLedger.LedgerCost? left, TokenLedger.LedgerCost? right)
+public static bool TokenLedger.LedgerDifference.op_Equality(TokenLedger.LedgerDifference? left, TokenLedger.LedgerDifference? right)
+public static bool TokenLedger.LedgerDifference.op_Inequality(TokenLedger.LedgerDifference? left, TokenLedger.LedgerDifference? right)
+public static bool TokenLedger.LedgerTotals.op_Equality(TokenLedger.LedgerTotals? left, TokenLedger.LedgerTotals? right)
+public static bool TokenLedger.LedgerTotals.op_Inequality(TokenLedger.LedgerTotals? left, TokenLedger.LedgerTotals? right)
+public static bool TokenLedger.ModelPrice.op_Equality(TokenLedger.ModelPrice? left, TokenLedger.ModelPrice? right)
+public static bool TokenLedger.ModelPrice.op_Inequality(TokenLedger.ModelPrice? left, TokenLedger.ModelPrice? right)
+public static void TokenLedger.Ledger.Configure(System.Action<TokenLedger.LedgerOptions> configure)
+public string TokenLedger.LedgerCost.Currency { get; init; }
+public string TokenLedger.LedgerDifference.Description { get; init; }
+public string TokenLedger.LedgerPricing.Currency { get; set; }
+public string TokenLedger.LedgerScenario.BaselinePath { get; }
+public string TokenLedger.LedgerScenario.Name { get; }
+public string TokenLedger.LedgerScenario.RecordingPath { get; }
+public string? TokenLedger.LedgerOptions.Directory { get; set; }
+public void TokenLedger.LedgerCost.Deconstruct(out decimal Amount, out string Currency, out System.Collections.Generic.IReadOnlyList<string> UnpricedModels)
+public void TokenLedger.LedgerDifference.Deconstruct(out TokenLedger.LedgerChangeKind Kind, out string Description)
+public void TokenLedger.LedgerScenario.Dispose()
+public void TokenLedger.LedgerScenario.Verify()
+public void TokenLedger.LedgerTotals.Deconstruct(out int Calls, out long InputTokens, out long OutputTokens, out long CachedInputTokens, out long ReasoningTokens, out int CallsWithoutUsage)
+public void TokenLedger.ModelPrice.Deconstruct(out decimal Input, out decimal Output, out decimal? CachedInput)
+sealed class TokenLedger.LedgerBudget : System.IEquatable<TokenLedger.LedgerBudget>
+sealed class TokenLedger.LedgerCall
+sealed class TokenLedger.LedgerCost : System.IEquatable<TokenLedger.LedgerCost>
+sealed class TokenLedger.LedgerDifference : System.IEquatable<TokenLedger.LedgerDifference>
+sealed class TokenLedger.LedgerOptions
+sealed class TokenLedger.LedgerPricing
+sealed class TokenLedger.LedgerScenario : System.IAsyncDisposable, System.IDisposable
+sealed class TokenLedger.LedgerTotals : System.IEquatable<TokenLedger.LedgerTotals>
+sealed class TokenLedger.ModelPrice : System.IEquatable<TokenLedger.ModelPrice>
+sealed class TokenLedger.TokenLedgerChatClient : Microsoft.Extensions.AI.DelegatingChatClient
+sealed class TokenLedger.TokenLedgerException : System.Exception
+static class TokenLedger.Ledger
+static class TokenLedger.TokenLedgerChatClientBuilderExtensions

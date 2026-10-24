@@ -1,0 +1,8 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/TokenLedger/TokenLedger.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/TokenLedger.Tests/TokenLedger.Tests.csproj" />
+  </Folder>
+</Solution>

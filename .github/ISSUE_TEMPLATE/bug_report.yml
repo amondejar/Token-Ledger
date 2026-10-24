@@ -1,0 +1,45 @@
+name: Bug report
+description: Something does not work as documented.
+labels: [bug]
+body:
+  - type: input
+    id: version
+    attributes:
+      label: TokenLedger version
+      placeholder: 0.1.0-preview.1
+    validations:
+      required: true
+  - type: input
+    id: provider
+    attributes:
+      label: Provider and Microsoft.Extensions.AI version
+      placeholder: OpenAI (Microsoft.Extensions.AI.OpenAI 10.4.0)
+    validations:
+      required: true
+  - type: dropdown
+    id: mode
+    attributes:
+      label: Mode
+      options: [auto, replay, record, live]
+    validations:
+      required: true
+  - type: textarea
+    id: repro
+    attributes:
+      label: Smallest code that shows it
+      description: The chat client pipeline and the test. A link to a repository works too.
+      render: csharp
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: What you expected, and what happened
+      description: Include the full TokenLedgerException message. Remove secrets from recordings before pasting them.
+    validations:
+      required: true
+  - type: input
+    id: dotnet
+    attributes:
+      label: .NET SDK and OS
+      placeholder: 10.0.100, Windows 11

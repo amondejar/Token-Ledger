@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <IsPackable>true</IsPackable>
+    <IsAotCompatible>true</IsAotCompatible>
+    <PackageId>TokenLedger</PackageId>
+    <RootNamespace>TokenLedger</RootNamespace>
+    <Description>AI cost and behavior snapshots for .NET apps that use IChatClient. Record the model's responses once and replay them in CI for free; measure calls, tokens and tool calls per test scenario; compare them with a committed baseline and fail on regressions or budgets. Prices are yours to configure. Works with any Microsoft.Extensions.AI provider.</Description>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.AI" Version="10.4.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="README.md" Pack="true" PackagePath="\" />
+    <InternalsVisibleTo Include="TokenLedger.Tests" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,13 @@
+version: 2
+updates:
+  - package-ecosystem: nuget
+    directory: /
+    schedule:
+      interval: weekly
+    ignore:
+      # The minimum Microsoft.Extensions.AI version TokenLedger supports; raised on purpose, not by a bot.
+      - dependency-name: "Microsoft.Extensions.AI*"
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
