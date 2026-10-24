@@ -9,7 +9,7 @@
 
     <!-- Package metadata shared by every packable project -->
     <VersionPrefix>0.2.0</VersionPrefix>
-    <VersionSuffix>preview.1</VersionSuffix>
+    <VersionSuffix>preview.2</VersionSuffix>
     <Authors>TokenLedger contributors</Authors>
     <Copyright>Copyright (c) TokenLedger contributors</Copyright>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>

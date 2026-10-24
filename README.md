@@ -1,3 +1,5 @@
+<img src="assets/icon.png" alt="" width="96" align="right">
+
 # TokenLedger
 
 **AI cost and behavior snapshots for .NET apps that use `IChatClient`.**

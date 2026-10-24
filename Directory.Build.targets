@@ -1,0 +1,9 @@
+<Project>
+  <!-- Every package carries the project icon. In a .targets file, because IsPackable is set by each project. -->
+  <PropertyGroup Condition="'$(IsPackable)' == 'true'">
+    <PackageIcon>icon.png</PackageIcon>
+  </PropertyGroup>
+  <ItemGroup Condition="'$(IsPackable)' == 'true'">
+    <None Include="$(MSBuildThisFileDirectory)assets/icon.png" Pack="true" PackagePath="\" Visible="false" />
+  </ItemGroup>
+</Project>

@@ -5,6 +5,12 @@ All notable changes to TokenLedger are documented here. The format follows
 
 ## [Unreleased]
 
+## [0.2.0-preview.2]
+
+### Added
+
+- The project icon on both packages and in the README.
+
 ## [0.2.0-preview.1]
 
 ### Added
