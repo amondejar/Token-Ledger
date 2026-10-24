@@ -77,11 +77,15 @@ public sealed class LedgerPricing
     public static LedgerPricing Load(string path)
     {
         ArgumentException.ThrowIfNullOrEmpty(path);
+        return Parse(File.ReadAllText(path), path);
+    }
+
+    internal static LedgerPricing Parse(string json, string path)
+    {
         PricingFile? file;
         try
         {
-            using var stream = File.OpenRead(path);
-            file = JsonSerializer.Deserialize(stream, LedgerJson.Lenient.PricingFile);
+            file = JsonSerializer.Deserialize(json, LedgerJson.Lenient.PricingFile);
         }
         catch (JsonException e)
         {

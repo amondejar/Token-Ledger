@@ -1,0 +1,7 @@
+// Illustrative prices per million tokens for the sample's demo model. Put your contract's prices here.
+{
+  "currency": "USD",
+  "models": {
+    "demo-model": { "input": 2.00, "output": 8.00, "cachedInput": 0.50 }
+  }
+}

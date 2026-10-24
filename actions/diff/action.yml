@@ -1,0 +1,121 @@
+name: TokenLedger diff
+description: >-
+  Compares the TokenLedger baselines between the pull request's base and head with dotnet tokenledger diff,
+  keeps one pull request comment up to date with the cost and behavior changes, and can fail the check on
+  regressions.
+branding:
+  icon: dollar-sign
+  color: green
+
+inputs:
+  fail-on:
+    description: Fail the step on regression, change (any difference, new or removed scenario), or never.
+    default: never
+  base:
+    description: The git ref to compare against. Default the pull request's base commit.
+    default: ''
+  tolerance:
+    description: Relative token change to ignore, from 0 to 1.
+    default: '0.10'
+  dir:
+    description: The TokenLedger folder name.
+    default: tokenledger
+  comment:
+    description: Post or update a pull request comment with the report (needs pull-requests write permission).
+    default: 'true'
+  version:
+    description: TokenLedger.Tool version. Default the latest, previews included.
+    default: ''
+  tool-command:
+    description: Run this instead of installing the tool (used by the TokenLedger repository itself).
+    default: ''
+
+outputs:
+  regressions:
+    description: Number of scenarios with a regression.
+    value: ${{ steps.diff.outputs.regressions }}
+  changed:
+    description: Number of scenarios that changed, appeared or disappeared.
+    value: ${{ steps.diff.outputs.changed }}
+  report:
+    description: Path of the Markdown report.
+    value: ${{ steps.diff.outputs.report }}
+
+runs:
+  using: composite
+  steps:
+    - name: Install dotnet-tokenledger
+      if: inputs.tool-command == ''
+      shell: bash
+      env:
+        VERSION: ${{ inputs.version }}
+      run: |
+        if [ -n "$VERSION" ]; then
+          dotnet tool install --global TokenLedger.Tool --version "$VERSION"
+        else
+          dotnet tool install --global TokenLedger.Tool --prerelease
+        fi
+
+    - name: Compare baselines
+      id: diff
+      shell: bash
+      env:
+        BASE: ${{ inputs.base || github.event.pull_request.base.sha }}
+        FAIL_ON: ${{ inputs.fail-on }}
+        TOLERANCE: ${{ inputs.tolerance }}
+        DIR: ${{ inputs.dir }}
+        TOOL: ${{ inputs.tool-command || 'dotnet-tokenledger' }}
+      run: |
+        if [ -z "$BASE" ]; then
+          echo "::error::No base ref: run on pull_request, or set the base input."
+          exit 2
+        fi
+        # actions/checkout fetches one commit by default; get the base one too.
+        git cat-file -e "$BASE^{commit}" 2>/dev/null || git fetch --no-tags --depth=1 origin "$BASE"
+
+        args=(diff "$BASE" HEAD --tolerance "$TOLERANCE" --dir "$DIR")
+        report="$RUNNER_TEMP/tokenledger-diff.md"
+        json="$RUNNER_TEMP/tokenledger-diff.json"
+        $TOOL "${args[@]}" --format markdown --output "$report"
+        $TOOL "${args[@]}" --format json --output "$json"
+
+        regressions=$(jq '.summary.regression' "$json")
+        changed=$(jq '.summary.scenarios - .summary.unchanged' "$json")
+        echo "report=$report" >> "$GITHUB_OUTPUT"
+        echo "regressions=$regressions" >> "$GITHUB_OUTPUT"
+        echo "changed=$changed" >> "$GITHUB_OUTPUT"
+        echo "has-baselines=$(jq '.summary.scenarios > 0' "$json")" >> "$GITHUB_OUTPUT"
+        cat "$report" >> "$GITHUB_STEP_SUMMARY"
+
+        set +e
+        $TOOL "${args[@]}" --fail-on "$FAIL_ON" > /dev/null
+        echo "exit=$?" >> "$GITHUB_OUTPUT"
+
+    - name: Comment on the pull request
+      # No comment for a repository without baselines, but an existing comment is updated when they all go away.
+      if: inputs.comment == 'true' && github.event.pull_request.number != ''
+      shell: bash
+      env:
+        GH_TOKEN: ${{ github.token }}
+        PR: ${{ github.event.pull_request.number }}
+        REPORT: ${{ steps.diff.outputs.report }}
+        HAS_BASELINES: ${{ steps.diff.outputs.has-baselines }}
+        BASE: ${{ inputs.base || github.event.pull_request.base.sha }}
+      run: |
+        marker='<!-- tokenledger-diff -->'
+        body="$(printf '%s\n%s\n\n<sub>dotnet tokenledger diff, base %s</sub>' "$marker" "$(cat "$REPORT")" "$BASE")"
+        existing=$(gh api "repos/$GITHUB_REPOSITORY/issues/$PR/comments" --paginate --jq ".[] | select(.body | startswith(\"$marker\")) | .id" 2>/dev/null | head -n1 || true)
+        if [ -n "$existing" ]; then
+          gh api --method PATCH "repos/$GITHUB_REPOSITORY/issues/comments/$existing" -f body="$body" > /dev/null \
+            || echo "::warning::Could not update the comment (a pull request from a fork has a read-only token). The report is in the job summary."
+        elif [ "$HAS_BASELINES" = "true" ]; then
+          gh api --method POST "repos/$GITHUB_REPOSITORY/issues/$PR/comments" -f body="$body" > /dev/null \
+            || echo "::warning::Could not comment (a pull request from a fork has a read-only token). The report is in the job summary."
+        fi
+
+    - name: Fail on changes
+      if: steps.diff.outputs.exit != '0'
+      shell: bash
+      run: |
+        echo "::error::TokenLedger found changes at or above '${{ inputs.fail-on }}': see the report in the job summary."
+        exit 1

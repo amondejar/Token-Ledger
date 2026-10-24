@@ -1,8 +1,12 @@
 <Solution>
   <Folder Name="/src/">
     <Project Path="src/TokenLedger/TokenLedger.csproj" />
+    <Project Path="src/TokenLedger.Tool/TokenLedger.Tool.csproj" />
   </Folder>
   <Folder Name="/tests/">
     <Project Path="tests/TokenLedger.Tests/TokenLedger.Tests.csproj" />
+  </Folder>
+  <Folder Name="/samples/">
+    <Project Path="samples/SupportBot.Tests/SupportBot.Tests.csproj" />
   </Folder>
 </Solution>

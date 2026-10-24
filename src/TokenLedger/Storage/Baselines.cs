@@ -34,17 +34,19 @@ internal static class Baselines
         };
     }
 
-    public static BaselineFile? Read(string path)
+    public static BaselineFile? Read(string path) => File.Exists(path) ? Parse(File.ReadAllText(path), path) : null;
+
+    /// <summary>Parses a baseline; <paramref name="source"/> names it in errors.</summary>
+    public static BaselineFile Parse(string json, string source)
     {
-        if (!File.Exists(path)) return null;
         try
         {
-            return JsonSerializer.Deserialize(File.ReadAllText(path), LedgerJson.Lenient.BaselineFile)
-                ?? throw new TokenLedgerException($"{path} is empty.");
+            return JsonSerializer.Deserialize(json, LedgerJson.Lenient.BaselineFile)
+                ?? throw new TokenLedgerException($"{source} is empty.");
         }
         catch (JsonException e)
         {
-            throw new TokenLedgerException($"{path} is not a valid baseline: {e.Message}. Fix it, or delete it and run the tests to create it again.", e);
+            throw new TokenLedgerException($"{source} is not a valid baseline: {e.Message}. Fix it, or delete it and run the tests to create it again.", e);
         }
     }
 

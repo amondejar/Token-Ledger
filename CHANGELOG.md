@@ -5,6 +5,20 @@ All notable changes to TokenLedger are documented here. The format follows
 
 ## [Unreleased]
 
+## [0.2.0-preview.1]
+
+### Added
+
+- `TokenLedger.Tool`, the `dotnet tokenledger` command:
+  - `diff [<base> [<head>]]` compares the baselines of two git refs (default `HEAD` and the working tree) and lists
+    each scenario as regression, change, improvement, new, removed or unchanged, with the estimated cost per run and
+    for the whole suite. Text, Markdown or JSON; `--fail-on regression|change` for CI.
+  - `summary [<ref>]`: what each scenario costs.
+  - `pricing init`: creates or completes `pricing.json` with an empty entry for each model the scenarios use.
+- `actions/diff`: a GitHub Action that runs the diff on pull requests, keeps one comment up to date, writes the job
+  summary and can fail the check on regressions.
+- `samples/SupportBot.Tests`: an agent with a tool and two scenarios, with their recordings and baselines.
+
 ## [0.1.0-preview.1]
 
 First preview.

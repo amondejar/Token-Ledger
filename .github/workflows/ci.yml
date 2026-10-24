@@ -15,8 +15,28 @@ jobs:
           dotnet-version: 10.0.x
       - run: dotnet build -c Release
       - run: dotnet run -c Release --no-build --project tests/TokenLedger.Tests
+      # The sample replays its committed recordings (CI means replay mode): no model is called.
+      - run: dotnet run -c Release --no-build --project samples/SupportBot.Tests
       - run: dotnet pack -c Release --no-build -o artifacts
       - uses: actions/upload-artifact@v4
         with:
           name: packages
           path: artifacts/*
+
+  tokenledger-diff:
+    # Comments the cost and behavior changes of the sample's scenarios on each pull request, with the tool
+    # built from this commit: the same action other repositories use.
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 10.0.x
+      - run: dotnet build -c Release src/TokenLedger.Tool
+      - uses: ./actions/diff
+        with:
+          tool-command: dotnet run -c Release --no-build --project src/TokenLedger.Tool --

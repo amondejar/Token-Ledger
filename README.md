@@ -17,7 +17,7 @@ compared with the previous version.
   and currencies are right, and a price change never shows up as a code regression.
 - **Any provider.** OpenAI, Azure OpenAI, Anthropic, Ollama: anything behind `Microsoft.Extensions.AI`, streaming included.
 
-> Status: **0.1 preview**. The `dotnet tokenledger diff` tool and the pull request comment come in 0.2; see the [roadmap](#roadmap).
+> Status: **0.2 preview**. See the [roadmap](#roadmap).
 
 ## Install
 
@@ -83,6 +83,36 @@ The calls differ from the baseline tokenledger/baselines/support-chat/order-stat
 If the change is intended, run the tests with TOKENLEDGER_UPDATE=1 and commit the baseline.
 ```
 
+## In pull requests
+
+`dotnet tokenledger diff` compares the baselines of two git refs, and a GitHub Action keeps the report as a comment on
+each pull request:
+
+```yaml
+- uses: amondejar/Token-Ledger/actions/diff@v0.2.0-preview.1
+  with:
+    fail-on: regression
+```
+
+> ### TokenLedger
+>
+> **1 regression** · 0 changes · 0 improvements · 0 new · 0 removed · 3 unchanged · `main` → `HEAD`
+>
+> | Scenario | Model calls | Tokens | Cost per run | |
+> | --- | ---: | ---: | ---: | --- |
+> | `support-chat/order-status` | 2 → 4 | 2,819 → 8,344 | 0.005107 EUR → 0.018 EUR | 🔴 regression |
+
+On your machine:
+
+```bash
+dotnet tool install --global TokenLedger.Tool --prerelease
+dotnet tokenledger diff                          # what your last test run changed
+dotnet tokenledger summary                       # what each scenario costs
+dotnet tokenledger pricing init --currency EUR   # pricing.json with an entry per model you use
+```
+
+Details in [Comparing branches and commenting on pull requests](docs/diff.md).
+
 ## Modes
 
 | Mode | What it does | Default |
@@ -137,6 +167,9 @@ internal static class TokenLedgerSetup
 }
 ```
 
+A complete example is in [samples/SupportBot.Tests](samples/SupportBot.Tests): an agent with a tool, two scenarios, and
+their committed recordings and baselines.
+
 More in the [guide](docs/guide.md): how requests are matched, ASP.NET Core integration tests, parallel calls,
 and what to commit.
 
@@ -149,8 +182,8 @@ and what to commit.
 
 ## Roadmap
 
-1. **0.1**: middleware, record and replay, measurement per scenario, baselines with `TOKENLEDGER_UPDATE`, budgets, your prices.
-2. **0.2**: `dotnet tokenledger diff` (text, Markdown, JSON), `pricing init`, and a GitHub Action that comments on the pull request.
+1. **0.1** ✅: middleware, record and replay, measurement per scenario, baselines with `TOKENLEDGER_UPDATE`, budgets, your prices.
+2. **0.2** ✅: `dotnet tokenledger diff` (text, Markdown, JSON), `summary`, `pricing init`, and a GitHub Action that comments on the pull request.
 3. **0.3**: cost per ASP.NET Core endpoint in `WebApplicationFactory` tests.
 4. **0.4**: a scheduled workflow that re-records against the real model and opens a pull request with what the provider changed.
 5. **1.0**: public API frozen for two previews, full documentation and samples with OpenAI, Azure OpenAI and Ollama.

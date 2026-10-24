@@ -8,7 +8,7 @@
     <NoWarn>$(NoWarn);CS1591</NoWarn>
 
     <!-- Package metadata shared by every packable project -->
-    <VersionPrefix>0.1.0</VersionPrefix>
+    <VersionPrefix>0.2.0</VersionPrefix>
     <VersionSuffix>preview.1</VersionSuffix>
     <Authors>TokenLedger contributors</Authors>
     <Copyright>Copyright (c) TokenLedger contributors</Copyright>

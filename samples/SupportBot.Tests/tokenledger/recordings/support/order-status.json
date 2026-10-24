@@ -1,0 +1,66 @@
+{
+  "format": 1,
+  "scenario": "support/order-status",
+  "interactions": [
+    {
+      "fingerprint": "116302414c42e664e7937825aea31805",
+      "request": {
+        "model": "demo-model",
+        "messages": 2,
+        "last": "user: Where is my order 42?"
+      },
+      "response": {
+        "model": "demo-model-2026-06-01",
+        "finishReason": "tool_calls",
+        "messages": [
+          {
+            "role": "assistant",
+            "contents": [
+              {
+                "type": "functionCall",
+                "callId": "call_8317f76efc734da1872838288f20fc56",
+                "name": "search_orders",
+                "arguments": {
+                  "orderId": 42
+                }
+              }
+            ]
+          }
+        ],
+        "usage": {
+          "input": 87,
+          "output": 12,
+          "total": 99
+        }
+      }
+    },
+    {
+      "fingerprint": "7cd6b15f5ecd1b1837938c3e3b297b7d",
+      "request": {
+        "model": "demo-model",
+        "messages": 4,
+        "last": "tool: (tool results)"
+      },
+      "response": {
+        "model": "demo-model-2026-06-01",
+        "finishReason": "stop",
+        "messages": [
+          {
+            "role": "assistant",
+            "contents": [
+              {
+                "type": "text",
+                "text": "Order 42: shipped on Monday, arriving Thursday. Anything else I can help with?"
+              }
+            ]
+          }
+        ],
+        "usage": {
+          "input": 95,
+          "output": 19,
+          "total": 114
+        }
+      }
+    }
+  ]
+}

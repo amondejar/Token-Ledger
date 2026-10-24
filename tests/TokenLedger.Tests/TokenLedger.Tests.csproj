@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\TokenLedger\TokenLedger.csproj" />
+    <ProjectReference Include="..\..\src\TokenLedger.Tool\TokenLedger.Tool.csproj" />
   </ItemGroup>
 
 </Project>

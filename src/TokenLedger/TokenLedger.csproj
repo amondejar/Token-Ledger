@@ -17,6 +17,8 @@
   <ItemGroup>
     <None Include="README.md" Pack="true" PackagePath="\" />
     <InternalsVisibleTo Include="TokenLedger.Tests" />
+    <!-- The tool ships this exact assembly and reuses the baseline comparison. -->
+    <InternalsVisibleTo Include="TokenLedger.Tool" />
   </ItemGroup>
 
 </Project>

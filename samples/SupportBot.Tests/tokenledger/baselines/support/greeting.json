@@ -1,0 +1,8 @@
+{
+  "format": 1,
+  "scenario": "support/greeting",
+  "calls": [
+    {"model":"demo-model-2026-06-01","input":84,"output":15,"tools":[]}
+  ],
+  "totals": {"calls":1,"input":84,"output":15,"cachedInput":0,"reasoning":0}
+}

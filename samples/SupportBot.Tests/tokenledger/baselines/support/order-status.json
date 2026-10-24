@@ -1,0 +1,9 @@
+{
+  "format": 1,
+  "scenario": "support/order-status",
+  "calls": [
+    {"model":"demo-model-2026-06-01","input":87,"output":12,"tools":["search_orders"]},
+    {"model":"demo-model-2026-06-01","input":95,"output":19,"tools":[]}
+  ],
+  "totals": {"calls":2,"input":182,"output":31,"cachedInput":0,"reasoning":0}
+}
