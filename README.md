@@ -19,7 +19,7 @@ compared with the previous version.
   and currencies are right, and a price change never shows up as a code regression.
 - **Any provider.** OpenAI, Azure OpenAI, Anthropic, Ollama: anything behind `Microsoft.Extensions.AI`, streaming included.
 
-> Status: **0.2 preview**. See the [roadmap](#roadmap).
+> Status: **0.3 preview**. See the [roadmap](#roadmap).
 
 ## Install
 
@@ -84,6 +84,21 @@ The calls differ from the baseline tokenledger/baselines/support-chat/order-stat
   estimated cost 0.005107 EUR → 0.0213 EUR per run
 If the change is intended, run the tests with TOKENLEDGER_UPDATE=1 and commit the baseline.
 ```
+
+## Cost per endpoint
+
+In ASP.NET Core integration tests, `TokenLedger.AspNetCore` attributes each call to the endpoint that made it:
+
+```csharp
+builder.ConfigureServices(services => services.AddTokenLedger());       // the test host
+
+await using var ledger = Ledger.Scenario("api/support-chat");          // a test
+var client = factory.CreateDefaultClient(new LedgerHttpHandler(ledger));
+await client.PostAsJsonAsync("/api/support/chat", new { message = "Where is my order 42?" });
+```
+
+The baseline then records `"POST api/support/chat": {"calls":2,...}`, and a change in one endpoint is reported by
+name: `regression  POST api/support/chat: model calls 2 → 3`. See the [guide](docs/guide.md#aspnet-core-integration-tests).
 
 ## In pull requests
 
@@ -169,7 +184,7 @@ internal static class TokenLedgerSetup
 }
 ```
 
-A complete example is in [samples/SupportBot.Tests](samples/SupportBot.Tests): an agent with a tool, two scenarios, and
+A complete example is in [samples/SupportBot.Tests](samples/SupportBot.Tests): an agent with a tool, three scenarios (one over HTTP), and
 their committed recordings and baselines.
 
 More in the [guide](docs/guide.md): how requests are matched, ASP.NET Core integration tests, parallel calls,
@@ -186,7 +201,7 @@ and what to commit.
 
 1. **0.1** ✅: middleware, record and replay, measurement per scenario, baselines with `TOKENLEDGER_UPDATE`, budgets, your prices.
 2. **0.2** ✅: `dotnet tokenledger diff` (text, Markdown, JSON), `summary`, `pricing init`, and a GitHub Action that comments on the pull request.
-3. **0.3**: cost per ASP.NET Core endpoint in `WebApplicationFactory` tests.
+3. **0.3** ✅: cost per ASP.NET Core endpoint in integration tests (`TokenLedger.AspNetCore`).
 4. **0.4**: a scheduled workflow that re-records against the real model and opens a pull request with what the provider changed.
 5. **1.0**: public API frozen for two previews, full documentation and samples with OpenAI, Azure OpenAI and Ollama.
 

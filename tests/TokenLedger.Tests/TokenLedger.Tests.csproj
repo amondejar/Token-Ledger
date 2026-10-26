@@ -9,6 +9,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\src\TokenLedger\TokenLedger.csproj" />
     <ProjectReference Include="..\..\src\TokenLedger.Tool\TokenLedger.Tool.csproj" />
+    <ProjectReference Include="..\..\src\TokenLedger.AspNetCore\TokenLedger.AspNetCore.csproj" />
   </ItemGroup>
 
 </Project>

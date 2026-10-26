@@ -29,7 +29,7 @@ public sealed class TokenLedgerChatClient : DelegatingChatClient
         if (Replay(scenario, fingerprint, list, options, defaultModel) is { } recorded)
         {
             var replayed = Recorded.ToResponse(recorded.Response);
-            scenario.Measure(recorded.Response.Model ?? "unknown", replayed.Usage, Recorded.Tools(replayed), replayed: true, streaming: false);
+            scenario.Measure(recorded.Response.Model ?? "unknown", replayed.Usage, Recorded.Tools(replayed), replayed: true, streaming: false, Ledger.CurrentEndpoint);
             return replayed;
         }
 
@@ -55,7 +55,7 @@ public sealed class TokenLedgerChatClient : DelegatingChatClient
         if (Replay(scenario, fingerprint, list, options, defaultModel) is { } recorded)
         {
             var replayed = Recorded.ToResponse(recorded.Response);
-            scenario.Measure(recorded.Response.Model ?? "unknown", replayed.Usage, Recorded.Tools(replayed), replayed: true, streaming: true);
+            scenario.Measure(recorded.Response.Model ?? "unknown", replayed.Usage, Recorded.Tools(replayed), replayed: true, streaming: true, Ledger.CurrentEndpoint);
             foreach (var update in Recorded.ToUpdates(recorded.Response))
             {
                 cancellationToken.ThrowIfCancellationRequested();
@@ -105,7 +105,7 @@ public sealed class TokenLedgerChatClient : DelegatingChatClient
             });
         }
 
-        scenario.Measure(model, response.Usage, Recorded.Tools(response), replayed: false, streaming);
+        scenario.Measure(model, response.Usage, Recorded.Tools(response), replayed: false, streaming, Ledger.CurrentEndpoint);
     }
 
     private static RecordedRequest Summary(IReadOnlyList<ChatMessage> messages, ChatOptions? options, string? defaultModel, LedgerOptions settings)

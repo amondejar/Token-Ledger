@@ -27,6 +27,12 @@ public sealed class LedgerCall
     /// <summary>True when the response came from the recording; false when the real model answered.</summary>
     public bool Replayed { get; init; }
 
+    /// <summary>
+    /// The HTTP endpoint that made the call, such as <c>POST api/support/chat</c>, when TokenLedger.AspNetCore
+    /// attributes it; null otherwise.
+    /// </summary>
+    public string? Endpoint { get; init; }
+
     /// <summary>True for a streaming call.</summary>
     public bool Streaming { get; init; }
 
@@ -36,7 +42,7 @@ public sealed class LedgerCall
     /// <inheritdoc />
     public override string ToString() =>
         $"#{Index} {Model}: {(UsageReported ? $"{InputTokens ?? 0} in, {OutputTokens ?? 0} out" : "no usage reported")}"
-        + (Tools.Count > 0 ? $", tools {string.Join(", ", Tools)}" : "") + (Replayed ? " (replayed)" : "");
+        + (Tools.Count > 0 ? $", tools {string.Join(", ", Tools)}" : "") + (Endpoint is null ? "" : $", from {Endpoint}") + (Replayed ? " (replayed)" : "");
 }
 
 /// <summary>The sums over a scenario's calls.</summary>

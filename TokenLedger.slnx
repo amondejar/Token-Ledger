@@ -2,6 +2,7 @@
   <Folder Name="/src/">
     <Project Path="src/TokenLedger/TokenLedger.csproj" />
     <Project Path="src/TokenLedger.Tool/TokenLedger.Tool.csproj" />
+    <Project Path="src/TokenLedger.AspNetCore/TokenLedger.AspNetCore.csproj" />
   </Folder>
   <Folder Name="/tests/">
     <Project Path="tests/TokenLedger.Tests/TokenLedger.Tests.csproj" />

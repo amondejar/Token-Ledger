@@ -124,6 +124,7 @@ public string TokenLedger.LedgerPricing.Currency { get; set; }
 public string TokenLedger.LedgerScenario.BaselinePath { get; }
 public string TokenLedger.LedgerScenario.Name { get; }
 public string TokenLedger.LedgerScenario.RecordingPath { get; }
+public string? TokenLedger.LedgerCall.Endpoint { get; init; }
 public string? TokenLedger.LedgerOptions.Directory { get; set; }
 public void TokenLedger.LedgerCost.Deconstruct(out decimal Amount, out string Currency, out System.Collections.Generic.IReadOnlyList<string> UnpricedModels)
 public void TokenLedger.LedgerDifference.Deconstruct(out TokenLedger.LedgerChangeKind Kind, out string Description)

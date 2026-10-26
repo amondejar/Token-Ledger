@@ -5,6 +5,19 @@ All notable changes to TokenLedger are documented here. The format follows
 
 ## [Unreleased]
 
+## [0.3.0-preview.1]
+
+### Added
+- **`TokenLedger.AspNetCore`**: `services.AddTokenLedger()` adds a middleware to the application under test that
+  attributes each model call to its endpoint (`POST api/support/chat`, the route pattern rather than the path), and
+  `LedgerHttpHandler` sends the open scenario with each request, so requests are measured with
+  `WebApplicationFactory`, `TestServer` or a real host, in parallel tests too.
+- `LedgerCall.Endpoint`, and an `endpoints` section in baselines (calls, input and output tokens per endpoint).
+  Baselines without attributed calls do not change.
+- Comparisons, in tests and in `dotnet tokenledger diff`, report a change in the calls of one endpoint by name:
+  `regression  POST api/support/chat: model calls 2 → 3`.
+- The sample gains a scenario over HTTP.
+
 ## [0.2.0-preview.2]
 
 ### Added

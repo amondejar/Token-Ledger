@@ -59,26 +59,53 @@ the last message, and is listed again when the scenario closes.
 
 ## ASP.NET Core integration tests
 
-The scenario lives in an `AsyncLocal`, so it reaches the chat client when the request runs in the test's async flow.
-`TestServer` does not keep that flow by default; turn it on:
+`TokenLedger.AspNetCore` measures the model calls an HTTP request makes and attributes each one to its endpoint.
+
+```bash
+dotnet add package TokenLedger.AspNetCore --prerelease
+```
+
+Add its middleware to the application under test, then send the test's requests through `LedgerHttpHandler`:
 
 ```csharp
 public sealed class ApiFactory : WebApplicationFactory<Program>
 {
     protected override void ConfigureWebHost(IWebHostBuilder builder) =>
-        builder.UseTestServer(options => options.PreserveExecutionContext = true);
+        builder.ConfigureServices(services => services.AddTokenLedger());
 }
 
 [Fact]
 public async Task Support_chat_answers()
 {
     await using var ledger = Ledger.Scenario("api/support-chat");
+    var client = factory.CreateDefaultClient(new LedgerHttpHandler(ledger));
+
     var response = await client.PostAsJsonAsync("/api/support/chat", new { message = "Where is my order 42?" });
+
     response.EnsureSuccessStatusCode();
+    ledger.Budget(maxCalls: 3);
 }
 ```
 
-A per-endpoint breakdown (`POST api/support/chat` makes 3 calls) comes in 0.3.
+- **The handler** adds a `TokenLedger-Scenario` header to each request, and the middleware joins the request to that
+  open scenario. That works whether or not the request runs in the test's async flow: `WebApplicationFactory`,
+  `TestServer`, or the application on a real port (`new HttpClient(new LedgerHttpHandler(ledger, new SocketsHttpHandler()))`).
+- **Each call records its endpoint** as the method and the route pattern: `GET orders/{id}`, never the path with its
+  ids. `LedgerCall.Endpoint` has it, and the baseline gains an `endpoints` section:
+
+```json
+  "endpoints": {
+    "POST api/support/chat": {"calls":2,"input":182,"output":27}
+  }
+```
+
+- **A change per endpoint is reported by name**, in the test and in `dotnet tokenledger diff`:
+  `regression  POST api/support/chat: model calls 2 → 3`.
+- **In production** the middleware finds no open scenario and does nothing, but it belongs to the test host:
+  register it in `ConfigureWebHost` (or the hook your test fixture has), not in `Program.cs`.
+
+Without the package, a request that runs in the test's async flow is still measured, without its endpoint:
+`TestServer` keeps that flow with `builder.UseTestServer(o => o.PreserveExecutionContext = true)`.
 
 ## Parallel calls
 

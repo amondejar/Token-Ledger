@@ -13,7 +13,11 @@ namespace TokenLedger.Tests;
 /// </summary>
 internal static class PublicApiTests
 {
-    public static void Register() => Check(typeof(Ledger).Assembly, "src/TokenLedger/PublicAPI.txt");
+    public static void Register()
+    {
+        Check(typeof(Ledger).Assembly, "src/TokenLedger/PublicAPI.txt");
+        Check(typeof(AspNetCore.LedgerHttpHandler).Assembly, "src/TokenLedger.AspNetCore/PublicAPI.txt");
+    }
 
     private static void Check(Assembly assembly, string relativePath) =>
         Test($"Public API: {assembly.GetName().Name} matches {relativePath}", () =>

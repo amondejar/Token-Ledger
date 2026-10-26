@@ -1,0 +1,66 @@
+{
+  "format": 1,
+  "scenario": "api/support-chat",
+  "interactions": [
+    {
+      "fingerprint": "0697b104626730139cd7bbea398e02cb",
+      "request": {
+        "model": "demo-model",
+        "messages": 2,
+        "last": "user: Where is my order 7?"
+      },
+      "response": {
+        "model": "demo-model-2026-06-01",
+        "finishReason": "tool_calls",
+        "messages": [
+          {
+            "role": "assistant",
+            "contents": [
+              {
+                "type": "functionCall",
+                "callId": "call_728365b5e78a401ca2d77c9f5d7dc186",
+                "name": "search_orders",
+                "arguments": {
+                  "orderId": 7
+                }
+              }
+            ]
+          }
+        ],
+        "usage": {
+          "input": 87,
+          "output": 12,
+          "total": 99
+        }
+      }
+    },
+    {
+      "fingerprint": "bd8b10ed3be364fce1c7a16c61bb498b",
+      "request": {
+        "model": "demo-model",
+        "messages": 4,
+        "last": "tool: (tool results)"
+      },
+      "response": {
+        "model": "demo-model-2026-06-01",
+        "finishReason": "stop",
+        "messages": [
+          {
+            "role": "assistant",
+            "contents": [
+              {
+                "type": "text",
+                "text": "Order 7: waiting for payment. Anything else I can help with?"
+              }
+            ]
+          }
+        ],
+        "usage": {
+          "input": 95,
+          "output": 15,
+          "total": 110
+        }
+      }
+    }
+  ]
+}

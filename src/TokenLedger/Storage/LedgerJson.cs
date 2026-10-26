@@ -9,6 +9,7 @@ namespace TokenLedger;
 [JsonSerializable(typeof(BaselineFile))]
 [JsonSerializable(typeof(BaselineCall))]
 [JsonSerializable(typeof(BaselineTotals))]
+[JsonSerializable(typeof(BaselineEndpoint))]
 [JsonSerializable(typeof(PricingFile))]
 [JsonSerializable(typeof(string))]
 internal sealed partial class LedgerJson : JsonSerializerContext
@@ -103,6 +104,16 @@ internal sealed class BaselineFile
     public string Scenario { get; set; } = "";
     public List<BaselineCall> Calls { get; set; } = [];
     public BaselineTotals Totals { get; set; } = new();
+
+    /// <summary>Calls and tokens per HTTP endpoint, when calls were attributed to endpoints (TokenLedger.AspNetCore).</summary>
+    public SortedDictionary<string, BaselineEndpoint>? Endpoints { get; set; }
+}
+
+internal sealed class BaselineEndpoint
+{
+    public int Calls { get; set; }
+    public long Input { get; set; }
+    public long Output { get; set; }
 }
 
 internal sealed class BaselineCall
@@ -113,6 +124,9 @@ internal sealed class BaselineCall
     public long? CachedInput { get; set; }
     public long? Reasoning { get; set; }
     public List<string> Tools { get; set; } = [];
+
+    /// <summary>The HTTP endpoint that made the call, when attributed.</summary>
+    public string? Endpoint { get; set; }
 }
 
 internal sealed class BaselineTotals

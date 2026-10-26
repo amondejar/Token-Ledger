@@ -1,0 +1,7 @@
+protected override System.Threading.Tasks.Task<System.Net.Http.HttpResponseMessage> TokenLedger.AspNetCore.LedgerHttpHandler.SendAsync(System.Net.Http.HttpRequestMessage request, System.Threading.CancellationToken cancellationToken)
+public TokenLedger.AspNetCore.LedgerHttpHandler(TokenLedger.LedgerScenario scenario)
+public TokenLedger.AspNetCore.LedgerHttpHandler(TokenLedger.LedgerScenario scenario, System.Net.Http.HttpMessageHandler innerHandler)
+public const string TokenLedger.AspNetCore.LedgerHttpHandler.HeaderName = "TokenLedger-Scenario"
+public static Microsoft.Extensions.DependencyInjection.IServiceCollection TokenLedger.AspNetCore.TokenLedgerServiceCollectionExtensions.AddTokenLedger(this Microsoft.Extensions.DependencyInjection.IServiceCollection services)
+sealed class TokenLedger.AspNetCore.LedgerHttpHandler : System.Net.Http.DelegatingHandler
+static class TokenLedger.AspNetCore.TokenLedgerServiceCollectionExtensions

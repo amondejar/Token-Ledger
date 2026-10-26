@@ -1,0 +1,12 @@
+{
+  "format": 1,
+  "scenario": "api/support-chat",
+  "calls": [
+    {"model":"demo-model-2026-06-01","input":87,"output":12,"tools":["search_orders"],"endpoint":"POST api/support/chat"},
+    {"model":"demo-model-2026-06-01","input":95,"output":15,"tools":[],"endpoint":"POST api/support/chat"}
+  ],
+  "totals": {"calls":2,"input":182,"output":27,"cachedInput":0,"reasoning":0},
+  "endpoints": {
+    "POST api/support/chat": {"calls":2,"input":182,"output":27}
+  }
+}

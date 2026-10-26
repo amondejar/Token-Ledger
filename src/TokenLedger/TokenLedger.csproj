@@ -19,6 +19,7 @@
     <InternalsVisibleTo Include="TokenLedger.Tests" />
     <!-- The tool ships this exact assembly and reuses the baseline comparison. -->
     <InternalsVisibleTo Include="TokenLedger.Tool" />
+    <InternalsVisibleTo Include="TokenLedger.AspNetCore" />
   </ItemGroup>
 
 </Project>

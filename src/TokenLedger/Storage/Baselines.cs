@@ -21,6 +21,7 @@ internal static class Baselines
                 CachedInput = c.CachedInputTokens is > 0 ? c.CachedInputTokens : null,
                 Reasoning = c.ReasoningTokens is > 0 ? c.ReasoningTokens : null,
                 Tools = [.. c.Tools],
+                Endpoint = c.Endpoint,
             })],
             Totals = new BaselineTotals
             {
@@ -31,6 +32,13 @@ internal static class Baselines
                 Reasoning = totals.ReasoningTokens,
                 Unreported = totals.CallsWithoutUsage > 0 ? totals.CallsWithoutUsage : null,
             },
+            Endpoints = calls.Any(c => c.Endpoint is not null)
+                ? new SortedDictionary<string, BaselineEndpoint>(
+                    calls.Where(c => c.Endpoint is not null).GroupBy(c => c.Endpoint!).ToDictionary(
+                        g => g.Key,
+                        g => new BaselineEndpoint { Calls = g.Count(), Input = g.Sum(c => c.InputTokens ?? 0), Output = g.Sum(c => c.OutputTokens ?? 0) }),
+                    StringComparer.Ordinal)
+                : null,
         };
     }
 
@@ -64,8 +72,23 @@ internal static class Baselines
         }
 
         json.Append(baseline.Calls.Count > 0 ? "\n  ],\n" : "],\n");
-        json.Append("  \"totals\": ").Append(JsonSerializer.Serialize(baseline.Totals, LedgerJson.Compact.BaselineTotals)).Append('\n');
-        json.Append("}\n");
+        json.Append("  \"totals\": ").Append(JsonSerializer.Serialize(baseline.Totals, LedgerJson.Compact.BaselineTotals));
+        if (baseline.Endpoints is { Count: > 0 } endpoints)
+        {
+            json.Append(",\n  \"endpoints\": {");
+            var first = true;
+            foreach (var (name, endpoint) in endpoints)
+            {
+                json.Append(first ? "\n" : ",\n").Append("    ")
+                    .Append(JsonSerializer.Serialize(name, LedgerJson.Compact.String)).Append(": ")
+                    .Append(JsonSerializer.Serialize(endpoint, LedgerJson.Compact.BaselineEndpoint));
+                first = false;
+            }
+
+            json.Append("\n  }");
+        }
+
+        json.Append("\n}\n");
         return json.ToString();
     }
 
@@ -93,6 +116,19 @@ internal static class Baselines
 
         var tools = (Sequence(before.Calls.SelectMany(c => c.Tools)), Sequence(after.Calls.SelectMany(c => c.Tools)));
         if (tools.Item1 != tools.Item2) differences.Add(new(LedgerChangeKind.Change, $"tools: {tools.Item1} → {tools.Item2}"));
+
+        // Per endpoint: the number of model calls each HTTP endpoint makes (TokenLedger.AspNetCore).
+        if (before.Endpoints is not null || after.Endpoints is not null)
+        {
+            var names = (before.Endpoints?.Keys ?? Enumerable.Empty<string>()).Union(after.Endpoints?.Keys ?? Enumerable.Empty<string>()).Order(StringComparer.Ordinal);
+            foreach (var name in names)
+            {
+                var callsThen = before.Endpoints?.GetValueOrDefault(name)?.Calls ?? 0;
+                var callsNow = after.Endpoints?.GetValueOrDefault(name)?.Calls ?? 0;
+                if (callsThen == callsNow) continue;
+                differences.Add(new(callsNow > callsThen ? LedgerChangeKind.Regression : LedgerChangeKind.Improvement, $"{name}: model calls {callsThen} → {callsNow}"));
+            }
+        }
 
         var (unreportedBefore, unreportedAfter) = (before.Totals.Unreported ?? 0, after.Totals.Unreported ?? 0);
         if (unreportedBefore != unreportedAfter)

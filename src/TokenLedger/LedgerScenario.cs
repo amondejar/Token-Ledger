@@ -58,6 +58,9 @@ public sealed class LedgerScenario : IDisposable, IAsyncDisposable
         }
     }
 
+    /// <summary>Identifies this run of the scenario to requests that carry it (TokenLedger.AspNetCore).</summary>
+    internal string Id { get; } = Guid.NewGuid().ToString("N");
+
     /// <summary>The scenario's name, which is also the path of its files.</summary>
     public string Name { get; }
 
@@ -211,7 +214,7 @@ public sealed class LedgerScenario : IDisposable, IAsyncDisposable
         }
     }
 
-    internal void Measure(string model, Microsoft.Extensions.AI.UsageDetails? usage, IReadOnlyList<string> tools, bool replayed, bool streaming)
+    internal void Measure(string model, Microsoft.Extensions.AI.UsageDetails? usage, IReadOnlyList<string> tools, bool replayed, bool streaming, string? endpoint)
     {
         lock (_lock)
         {
@@ -226,6 +229,7 @@ public sealed class LedgerScenario : IDisposable, IAsyncDisposable
                 Tools = tools,
                 Replayed = replayed,
                 Streaming = streaming,
+                Endpoint = endpoint,
             });
         }
     }

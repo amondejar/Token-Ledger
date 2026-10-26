@@ -16,6 +16,8 @@ namespace TokenLedger;
 public static class Ledger
 {
     private static readonly AsyncLocal<LedgerScenario?> Active = new();
+    private static readonly AsyncLocal<Func<string?>?> ActiveEndpoint = new();
+    private static readonly System.Collections.Concurrent.ConcurrentDictionary<string, LedgerScenario> Open = new(StringComparer.Ordinal);
 
     /// <summary>The process-wide settings. Change them before the first scenario, for example in a module initializer.</summary>
     public static LedgerOptions Options { get; } = new();
@@ -53,12 +55,42 @@ public static class Ledger
         var root = LedgerPaths.Root(project, Options.Directory);
         var scenario = new LedgerScenario(name, Options, LedgerEnvironment.Mode(Options), LedgerEnvironment.Update(Options), project, root, Active.Value);
         Active.Value = scenario;
+        Open[scenario.Id] = scenario;
         return scenario;
     }
 
     internal static void Restore(LedgerScenario closing, LedgerScenario? previous)
     {
+        Open.TryRemove(closing.Id, out _);
         if (ReferenceEquals(Active.Value, closing)) Active.Value = previous;
+    }
+
+    /// <summary>An open scenario by its id, for requests that name it (TokenLedger.AspNetCore).</summary>
+    internal static LedgerScenario? Find(string id) => Open.GetValueOrDefault(id);
+
+    /// <summary>Makes <paramref name="scenario"/> current in this async flow until disposed.</summary>
+    internal static IDisposable Enter(LedgerScenario scenario)
+    {
+        var previous = Active.Value;
+        Active.Value = scenario;
+        return new Undo(() => Active.Value = previous);
+    }
+
+    /// <summary>The endpoint the calls in this async flow belong to, resolved when a call is measured.</summary>
+    internal static IDisposable Endpoint(Func<string?> endpoint)
+    {
+        var previous = ActiveEndpoint.Value;
+        ActiveEndpoint.Value = endpoint;
+        return new Undo(() => ActiveEndpoint.Value = previous);
+    }
+
+    internal static string? CurrentEndpoint => ActiveEndpoint.Value?.Invoke();
+
+    private sealed class Undo(Action undo) : IDisposable
+    {
+        private Action? _undo = undo;
+
+        public void Dispose() => Interlocked.Exchange(ref _undo, null)?.Invoke();
     }
 }
 
